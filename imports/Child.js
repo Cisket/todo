@@ -3,12 +3,14 @@ import HandleRemove from './Delete'
 import Update from './Update'
 import Slash from './slash'
 
+
 export default class Child extends React.Component{
 
-getData(index){
-	
-	var newTodo = this.refs.newTodo.value.trim()
-	this.props.handleUpdate(newTodo, index)
+getData( e ){
+	this.setState({[e.target.name]:e.target.value.trim()},()=>{
+		console.log(this.state)
+	})
+
 }
 
 handleClick(index, event){
@@ -27,21 +29,28 @@ handleHover(index){
 			
 		}
 		let style = {
-			display :'none'
+			display :'inline-block'
 		}
-		let inline = {
-			display:'grid',
-			gridTemplateColumns:'1fr 1fr 1fr',
-			
-
+		let stripe = {
+			background:'red'
 		}
 		
 		return (
 			<div  className='test'> {
 				this.props.todos.map((todo, index)=>{
+					if(index % 2 == 0){
+						stripe ={
+							background:' #cccccc',
+
+						}
+					}else{
+						stripe={
+							background:'#808080'
+						}
+					}
 					if(todo.mousing){
 						style={
-							display:'block'
+							display:'inline-block'
 
 						}
 					}else{
@@ -52,21 +61,25 @@ handleHover(index){
 							done = {
 								cursor:'pointer',
 								textDecoration:'line-through',
-								opacity: 0.4	
+								opacity: 0.2	
 
 							}
 						}else{
 								console.log(false, todo.text)
 								done ={
 									cursor:'pointer',
-									textDecoration:'none'
+									textDecoration:'none',
+									wide: '300'
+
 								}
 						}		
-					return <div  
+					return <div 
+					onChange ={this.getData.bind(this)} 
+						className="banana"
 
 								onMouseEnter ={this.handleHover.bind(this, index)}
 								onMouseLeave ={() => this.props.handleLeave(index)}
-								style={inline}
+								style={stripe}
 								key ={index}>
 
 								
@@ -74,15 +87,18 @@ handleHover(index){
 
 								onClick={this.handleClick.bind(this, index)}
 
-								style={done}> {todo.text}</span>
-							<span style={style}>
-						   		<HandleRemove 
-						   			handleRemove = {this.props.handleRemove}
-						   			id={index}>
-						   		</HandleRemove>	
+								style={done} className="Banana"> {todo.text}</span>
 
+						   		<span style={style}> 
+							   		<HandleRemove
+							   			handleRemove = {this.props.handleRemove}
+							   			id={index}>
+							   		</HandleRemove>	
+						   		</span>
 
-						   		 <input
+						   		 <input 
+						   		 name ='input'
+						   		 style={style}
 						   		 className="input2"
 						   		 	
 						   		 
@@ -90,48 +106,19 @@ handleHover(index){
 									
 						   		 />
 
-						   		 <button
+						   		 <button 
+						   		 onClick={()=>this.props.handleUpdate(this.state.input, index)} 
+						   		 	style={style}  className="reload">
 						   		 
-						   		 onClick={this.getData.bind(this, index)}>
-
-					           Update
+					           <i className="fa fa-pencil"></i>
 						   		 </button>
 						   		 
-						   		 </span>
+
 						   </div>
 					})
 			}
 			</div>
 		)
 	} }
-
-
-
-// import React from 'react'
-// import Remove from './Delete'
-// import Update from "./Update"
-// export default class Child extends React.Component{
-
-
-// 	render(){
-
-// 		return (
-// 			<div> {
-// 				this.props.todos.map((todo, i)=>{
-					
-// 					return <div>
-// 								<h1 key ={i}> {todo.text}</h1>
-// 						   		<handleRemove 
-// 						   		handleRemove = {this.props.handleRemove}
-// 						   		id={i}></handleRemove>
-// 						   		<handleUpdate 
-// 						   		handleUpdate = {this.props.handleRemove}
-// 						   		id={i}></handleUpdate> 
-// 						   </div>
-// 					})
-// 			}
-// 			</div>
-// 		)
-// 	} }
 
 

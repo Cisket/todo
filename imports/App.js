@@ -72,11 +72,12 @@ handleLeave(index){
 
 
     handleUpdate        = (newTodo, index) =>{      
-        
         var arr         = this.state.arr
         arr[index].text = newTodo
         if (newTodo.length > 0) {
+            debugger
             this.setState({arr:arr},()=>{
+                debugger
             })
         }
     }
@@ -100,7 +101,7 @@ handleLeave(index){
     render(){
       console.log(this.state.arr)
       return (
-        <div>
+        <div className="big">
         <h1 className="wrapper">Welcome to Francesc's TODO app!
         </h1>
 
