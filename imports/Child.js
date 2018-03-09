@@ -1,13 +1,13 @@
 import React from 'react'
 import HandleRemove from './Delete'
-import Update from './Update'
+// import Update from './Update'
 import Slash from './slash'
 
 
 export default class Child extends React.Component{
 
 getData( e ){
-	this.setState({[e.target.name]:e.target.value.trim()},()=>{
+	this.setState({input:e.target.value.trim()},()=>{
 		console.log(this.state)
 	})
 
@@ -23,6 +23,12 @@ handleHover(index){
 	this.props.hover(index)
 	
 }
+
+handleUpdate(id){
+	this.props.handleUpdate(this.state.input, id)
+}
+
+
 	render(){
 		let done= {
 			cursor:'pointer'
@@ -92,7 +98,9 @@ handleHover(index){
 						   		<span style={style}> 
 							   		<HandleRemove
 							   			handleRemove = {this.props.handleRemove}
-							   			id={index}>
+							   			index={index}
+							   			id={todo._id}
+							   			>
 							   		</HandleRemove>	
 						   		</span>
 
@@ -107,7 +115,7 @@ handleHover(index){
 						   		 />
 
 						   		 <button 
-						   		 onClick={()=>this.props.handleUpdate(this.state.input, index)} 
+						   		 onClick={this.handleUpdate.bind(this, todo._id)} 
 						   		 	style={style}  className="reload">
 						   		 
 					           <i className="fa fa-pencil"></i>

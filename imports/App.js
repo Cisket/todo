@@ -1,7 +1,10 @@
     import React from "react"
     import Child from "./Child"
-
+    import {Todos} from './api/todos'
     
+    alert("Hello, thanks for visiting my TODO App, here you can add your TODO, mark/unmark it, delete it, update it and everything will be saved in the server for the next time you come back.");
+
+
     export default class App extends React.Component{
 
      constructor(){
@@ -15,7 +18,21 @@
         this.myFunction = this.myFunction.bind(this)
         this.hover = this.hover.bind(this)
         this.handleLeave = this.handleLeave.bind(this)
+        this.findMyTodos = this.findMyTodos.bind(this)
      }
+    findMyTodos(){
+        var that = this
+        Tracker.autorun(()=>{
+            var todos = Todos.find({}).fetch()
+            this.setState({arr:todos})       
+        })
+
+    }
+     componentWillMount(){
+        this.findMyTodos()
+        
+     }
+
 
     handleSubmit = (e) =>{
         
@@ -23,22 +40,30 @@
         var text = this.refs.input.value.trim()
         if (text.length > 0) {
         var arr2 = this.state.arr
-        arr2.push({text:text, linetrought:false})
+
+        Todos.insert({text:text, linetrought:false},()=>{
+            
+        })
         this.setState({arr:arr2})
         this.refs.input.value = ""
     }
 }
 
-    handleRemove = (index) =>{
-
-        var arr = this.state.arr
-        arr.splice(index, 1)
-        this.setState({arr})
+    handleRemove = (id) =>{
+        var that =this
+        Todos.remove({_id:id})
     }
 
+ handleUpdate   = (newTodo, id) =>{  
+ debugger 
 
-myFunction(index){
-    var arr = this.state.arr
+    Todos.update({_id:id},{$set:{text:newTodo}},(e,d)=>{
+        debugger
+    })
+    }
+
+    myFunction(index){
+        var arr = this.state.arr
     if(arr[index].linetrought == false){
         arr[index].linetrought = true
     }else{
@@ -71,16 +96,7 @@ handleLeave(index){
 
 
 
-    handleUpdate        = (newTodo, index) =>{      
-        var arr         = this.state.arr
-        arr[index].text = newTodo
-        if (newTodo.length > 0) {
-            debugger
-            this.setState({arr:arr},()=>{
-                debugger
-            })
-        }
-    }
+   
 
 
     handleClick = (index) =>{
@@ -125,6 +141,7 @@ handleLeave(index){
             handleClick={this.handleClick}
             hover={this.hover}
             handleLeave={this.handleLeave}
+
 
             />
         </div> 
